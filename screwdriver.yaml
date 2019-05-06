@@ -16,7 +16,5 @@ jobs:
       - setup_path: export PATH=/opt/python/cp37-cp37m/bin:/opt/python/cp36-cp36m/bin:$PATH
       - install_tox: python3 -m pip install tox
       - run_tox: |
-          cd package
           tox
-          cd ..
       - end: echo end
