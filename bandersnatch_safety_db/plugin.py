@@ -8,10 +8,11 @@ from packaging.requirements import Requirement, InvalidRequirement
 from packaging.version import InvalidVersion, Version
 
 
-logger = logging.getLogger("bandersnatch")
+logger = logging.getLogger(__name__)
 
 
-class SafetyDBLoader(object):
+class SafetyDBReleaseFilter(FilterReleasePlugin):
+    name = "safety_db_release"
     safety_db_src = 'github'
 
     # Details to fetch from github
@@ -21,6 +22,14 @@ class SafetyDBLoader(object):
 
     # Requires iterable default
     safety_db: Dict[str, List] = {}
+
+    def initialize_plugin(self):
+        """
+        Initialize the plugin
+        """
+        logger.info(f'Initialized release plugin {self.name}, loading safetydb from {self.safety_db_src}')
+        if not self.safety_db:
+            self.load_safety_db()
 
     def load_safety_db_from_github(self):
         """Load the safety_db from the official github repo"""
@@ -55,47 +64,18 @@ class SafetyDBLoader(object):
                 except InvalidRequirement:
                     logger.warn(f'Error adding invalid requirement {req_str}')
 
-
-class SafetyDBReleaseFilter(FilterReleasePlugin, SafetyDBLoader):
-    name = "safety_db_release"
-
-    def initialize_plugin(self):
-        """
-        Initialize the plugin
-        """
-        if not self.safety_db:
-            self.load_safety_db()
-
-    def _determine_filtered_package_requirements(self):
-        """
-        Parse the configuration file for [blacklist]packages
-
-        Returns
-        -------
-        list of packaging.requirements.Requirement
-            For all PEP440 package specifiers
-        """
-        filtered_requirements = set()
-        try:
-            lines = self.configuration["blacklist"]["packages"]
-            package_lines = lines.split("\n")
-        except KeyError:
-            package_lines = []
-        for package_line in package_lines:
-            package_line = package_line.strip()
-            if not package_line or package_line.startswith("#"):
-                continue
-            filtered_requirements.add(Requirement(package_line))
-        return list(filtered_requirements)
-
     def filter(self, info, releases):
         name = info["name"]
+
         if name not in self.safety_db.keys():
             # Package is not in the safety_db
-            return
+            return False
 
+        logger.info(f'Filtering: {name} from {releases!r}')
+        logger.info(f'Safetydb: {self.safety_db[name]}')
         for version in list(releases.keys()):
             if self._check_match(name, version):
+                logger.info(f'Removing {version} from releases')
                 del releases[version]
 
     def _check_match(self, name, version_string) -> bool:
@@ -116,21 +96,16 @@ class SafetyDBReleaseFilter(FilterReleasePlugin, SafetyDBLoader):
         bool:
             True if it matches, False otherwise.
         """
-        if not name or not version_string:
-            return False
-
         try:
             version = Version(version_string)
         except InvalidVersion:
-            logger.debug(f"Package {name}=={version_string} has an invalid version")
+            logger.warning(f"Package {name}=={version_string} has an invalid version")
             return False
-        for requirement in self.blacklist_release_requirements:
-            if name != requirement.name:
-                continue
+
+        for requirement in self.safety_db[name]:
+            logger.debug(f'Checking {version} in {requirement.specifier} = {version in requirement.specifier}')
             if version in requirement.specifier:
-                logger.debug(
-                    f"MATCH: Release {name}=={version} matches specifier "
-                    f"{requirement.specifier}"
-                )
+                logger.info(f"MATCH: Release {name}=={version} matches specifier {requirement.specifier}")
                 return True
+
         return False
