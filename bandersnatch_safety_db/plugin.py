@@ -1,116 +1,70 @@
+import collections
 import logging
+import requests
+
 from typing import Dict, List
-
 from bandersnatch.filter import FilterProjectPlugin, FilterReleasePlugin
-from packaging.requirements import Requirement
+from packaging.requirements import Requirement, InvalidRequirement
 from packaging.version import InvalidVersion, Version
-
-from .loader import SafetyDBGit, SafetyDBPackage
 
 
 logger = logging.getLogger("bandersnatch")
 
 
-class SafetyDBProjectFilter(FilterProjectPlugin):
-    name = "safety_db_project"
+class SafetyDBLoader(object):
+    safety_db_src = 'github'
 
+    # Details to fetch from github
+    git_branch: str = 'master'
+    git_org: str = 'pyupio'
+    git_repo: str = 'safety-db'
 
     # Requires iterable default
-    safety_db: Dict[str, List] = []
+    safety_db: Dict[str, List] = {}
 
-    def initialize_plugin(self):
-        """
-        Initialize the plugin
-        """
-        # Generate a list of blacklisted packages from the configuration and
-        # store it into self.blacklist_package_names attribute so this
-        # operation doesn't end up in the fastpath.
-        if not self.blacklist_package_names:
-            self.blacklist_package_names = self._determine_filtered_package_names()
-            logger.info(
-                f"Initialized project plugin {self.name}, filtering "
-                + f"{self.blacklist_package_names}"
-            )
+    def load_safety_db_from_github(self):
+        """Load the safety_db from the official github repo"""
+        url = f'https://raw.githubusercontent.com/{self.git_org}/{self.git_repo}/{self.git_branch}/data/insecure.json'
+        response = requests.get(url)
+        response.raise_for_status()
+        logger.debug(f'Loaded safety_db from github at url: {url}')
+        print(url)
+        return response.json()
 
-    def _determine_filtered_package_names(self):
-        """
-        Return a list of package names to be filtered base on the configuration
-        file.
-        """
-        # This plugin only processes packages, if the line in the packages
-        # configuration contains a PEP440 specifier it will be processed by the
-        # blacklist release filter.  So we need to remove any packages that
-        # are not applicable for this plugin.
-        filtered_packages = set()
-        try:
-            lines = self.configuration["blacklist"]["packages"]
-            package_lines = lines.split("\n")
-        except KeyError:
-            package_lines = []
-        for package_line in package_lines:
-            package_line = package_line.strip()
-            if not package_line or package_line.startswith("#"):
-                continue
-            package_requirement = Requirement(package_line)
-            if package_requirement.specifier:
-                continue
-            if package_requirement.name != package_line:
-                logger.debug(
-                    "Package line %r does not requirement name %r",
-                    package_line,
-                    package_requirement.name,
-                )
-                continue
-            filtered_packages.add(package_line)
-        logger.debug("Project blacklist is %r", list(filtered_packages))
-        return list(filtered_packages)
+    def load_safety_db_from_package(self):
+        """Load the safety_db from the safety-db package"""
+        from safety_db import INSECURE
+        return INSECURE
 
-    def check_match(self, **kwargs):
-        """
-        Check if the package name matches against a project that is blacklisted
-        in the configuration.
+    def load_safety_db(self):
+        """Load the safety_db into the plugin"""
+        # Get the safety_db
+        if self.safety_db_src == 'github':
+            safety_db_src = self.load_safety_db_from_github()
+        elif self.safety_db_src == 'package':
+            safety_db_src = self.load_safety_db_from_package()
 
-        Parameters
-        ==========
-        name: str
-            The normalized package name of the package/project to check against
-            the blacklist.
-
-        Returns
-        =======
-        bool:
-            True if it matches, False otherwise.
-        """
-        name = kwargs.get("name", None)
-        if not name:
-            return False
-
-        if name in self.blacklist_package_names:
-            logger.info(f"Package {name!r} is blacklisted")
-            return True
-        return False
+        # Change the requiremnt strings to requirements
+        self.safety_db = collections.defaultdict(lambda: [])
+        for package, requirements in safety_db_src.items():
+            for req in requirements:
+                req = req.strip()
+                req_str = f'{package}{req}'
+                try:
+                    self.safety_db[package].append(Requirement(req_str))
+                except InvalidRequirement:
+                    logger.warn(f'Error adding invalid requirement {req_str}')
 
 
-class SafetyDBReleaseFilter(FilterReleasePlugin):
+class SafetyDBReleaseFilter(FilterReleasePlugin, SafetyDBLoader):
     name = "safety_db_release"
-    # Requires iterable default
-    blacklist_package_names: List[Requirement] = []
 
     def initialize_plugin(self):
         """
         Initialize the plugin
         """
-        # Generate a list of blacklisted packages from the configuration and
-        # store it into self.blacklist_package_names attribute so this
-        # operation doesn't end up in the fastpath.
-        if not self.blacklist_package_names:
-            self.blacklist_release_requirements = (
-                self._determine_filtered_package_requirements()
-            )
-            logger.info(
-                f"Initialized release plugin {self.name}, filtering "
-                + f"{self.blacklist_release_requirements}"
-            )
+        if not self.safety_db:
+            self.load_safety_db()
 
     def _determine_filtered_package_requirements(self):
         """
@@ -136,6 +90,10 @@ class SafetyDBReleaseFilter(FilterReleasePlugin):
 
     def filter(self, info, releases):
         name = info["name"]
+        if name not in self.safety_db.keys():
+            # Package is not in the safety_db
+            return
+
         for version in list(releases.keys()):
             if self._check_match(name, version):
                 del releases[version]
