@@ -3,7 +3,7 @@ Bandersnatch safety-db filtering plugin module
 """
 import collections
 import logging
-from typing import Dict, List
+from typing import Any, Dict, List
 from bandersnatch.filter import FilterReleasePlugin
 from packaging.requirements import Requirement, InvalidRequirement
 from packaging.version import InvalidVersion, Version
@@ -41,13 +41,12 @@ class SafetyDBReleaseFilter(FilterReleasePlugin):
         response = requests.get(url)
         response.raise_for_status()
         logger.debug(f'Loaded safety_db from github at url: {url}')
-        print(url)
         return response.json()
 
     def load_safety_db_from_package(self):
         """Load the safety_db from the safety-db package"""
         from safety_db import INSECURE
-        return INSECURE
+        return INSECURE  # pylint: disable=E0611
 
     def load_safety_db(self):
         """Load the safety_db into the plugin"""
@@ -68,7 +67,7 @@ class SafetyDBReleaseFilter(FilterReleasePlugin):
                 except InvalidRequirement:
                     logger.warning(f'Error adding invalid requirement {req_str}')
 
-    def check_match(self, name, version) -> bool:
+    def check_match(self, **kwargs: Any) -> bool:
         """
         Check if the package name and version matches against a blacklisted
         package version specifier.
@@ -86,6 +85,8 @@ class SafetyDBReleaseFilter(FilterReleasePlugin):
         bool:
             True if it matches, False otherwise.
         """
+        name = kwargs['name']
+        version = kwargs['version']
         print(f'Checking for {name}=={version} in safety_db')
         try:
             version = Version(version)
