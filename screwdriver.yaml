@@ -8,3 +8,7 @@ jobs:
   validate_lint:
     template: python/validate_lint
     requires: [~commit, ~pr]
+
+  validate_codestyle:
+    template: python/validate_codestyle
+    requires: [~commit, ~pr]
