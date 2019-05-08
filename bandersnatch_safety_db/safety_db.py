@@ -95,7 +95,7 @@ class SafetyDBReleaseFilter(FilterReleasePlugin):
         print(f'Checking for {name}=={version} in safety_db')
         try:
             version = Version(version)
-        except InvalidVersion:
+        except InvalidVersion:  # pragma: no cover
             logger.warning(f"Package {name}=={version} has an invalid version")
             return False
 
