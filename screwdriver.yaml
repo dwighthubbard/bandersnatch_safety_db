@@ -15,7 +15,10 @@ jobs:
     template: python/validate_codestyle
     requires: [~commit, ~pr]
 
+  generate_version:
+    template: python/generate_version
+    requires: [~commit]
+    
   package_python_sdist:
     template: python/package_python_sdist
-    requires: [validate_test, validate_lint, validate_codestyle]
-
+    requires: [validate_test, validate_lint, validate_codestyle, generate_version]
