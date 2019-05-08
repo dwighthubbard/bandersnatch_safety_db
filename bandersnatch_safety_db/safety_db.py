@@ -44,11 +44,11 @@ class SafetyDBReleaseFilter(FilterReleasePlugin):
         return response.json()
 
     @staticmethod
-    def load_safety_db_from_package():
+    def load_safety_db_from_package():  # pragma: no cover
         """Load the safety_db from the safety-db package"""
         # This currently fails because the current versions of the security_db packages are broken and don't include
         # the database files.
-        from safety_db import INSECURE  # pragma: no cover  pylint: disable=E0611
+        from safety_db import INSECURE  # pylint: disable=E0611
         return INSECURE
 
     def load_safety_db(self):
@@ -58,7 +58,7 @@ class SafetyDBReleaseFilter(FilterReleasePlugin):
         safety_db_src = {}
         if self.safety_db_src == 'github':
             safety_db_src = self.load_safety_db_from_github()
-        elif self.safety_db_src == 'package':
+        elif self.safety_db_src == 'package':  # pragma: no cover - The packages are currently broken
             safety_db_src = self.load_safety_db_from_package()
 
         # Change the requiremnt strings to requirements
