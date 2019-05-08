@@ -1,3 +1,6 @@
+"""
+Bandersnatch safety-db filtering plugin module
+"""
 import collections
 import logging
 from typing import Dict, List
@@ -11,6 +14,9 @@ logger = logging.getLogger(__name__)
 
 
 class SafetyDBReleaseFilter(FilterReleasePlugin):
+    """
+    Bandersnatch Release filter to filter all release specified in safety_db
+    """
     name = "safety_db_release"
     safety_db_src = 'github'
 
