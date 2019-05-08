@@ -5,10 +5,6 @@ jobs:
     template: python/validate_unittest
     secrets:
       - CODECOV_TOKEN
-    steps:
-      - postinstall_tox: $BASE_PYTHON -m pip install codecov coverage
-      - postvalidate_code: |
-          codecov
     requires: [~commit, ~pr]
 
   validate_lint:
