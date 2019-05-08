@@ -46,7 +46,9 @@ class SafetyDBReleaseFilter(FilterReleasePlugin):
     @staticmethod
     def load_safety_db_from_package():
         """Load the safety_db from the safety-db package"""
-        from safety_db import INSECURE  # pylint: disable=E0611
+        # This currently fails because the current versions of the security_db packages are broken and don't include
+        # the database files.
+        from safety_db import INSECURE  #   pragma: no cover  pylint: disable=E0611
         return INSECURE
 
     def load_safety_db(self):
