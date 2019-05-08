@@ -1,11 +1,10 @@
 import collections
 import logging
-import requests
-
 from typing import Dict, List
-from bandersnatch.filter import FilterProjectPlugin, FilterReleasePlugin
+from bandersnatch.filter import FilterReleasePlugin
 from packaging.requirements import Requirement, InvalidRequirement
 from packaging.version import InvalidVersion, Version
+import requests
 
 
 logger = logging.getLogger(__name__)
