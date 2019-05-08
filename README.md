@@ -8,3 +8,5 @@
 | **Reporting** | [![codecov](https://codecov.io/gh/dwighthubbard/bandersnatch_safety_db/branch/master/graph/badge.svg)](https://codecov.io/gh/dwighthubbard/bandersnatch_safety_db) |  
 
 -----
+
+# Bandersnatch Safety DB filtering plugin
