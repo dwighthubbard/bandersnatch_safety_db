@@ -1,0 +1,24 @@
+[run]
+parallel = True
+branch = True
+omit =
+  tests/*
+  setup.py
+  *egg*
+  .venv/*
+cover_pylib=False
+source = bandersnatch_safety_db
+
+[report]
+ignore_errors = True
+exclude_lines =
+  pragma: no cover
+  @def test_
+  def __repr__
+  if self\.debug
+  raise AssertionError
+  raise NotImplementedError
+  if 0:
+  if __name__ == .__main__.:
+precision = 1
+show_missing = True
