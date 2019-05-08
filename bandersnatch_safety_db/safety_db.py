@@ -69,7 +69,7 @@ class SafetyDBReleaseFilter(FilterReleasePlugin):
                 req_str = f'{package}{req}'
                 try:
                     self.safety_db[package].append(Requirement(req_str))
-                except InvalidRequirement:
+                except InvalidRequirement:  # pragma: no cover
                     logger.warning(f'Error adding invalid requirement {req_str}')
 
     def check_match(self, **kwargs: Any) -> bool:
