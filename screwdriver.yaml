@@ -12,3 +12,7 @@ jobs:
   validate_codestyle:
     template: python/validate_codestyle
     requires: [~commit, ~pr]
+
+  package_python_sdist:
+    template: python/package_python_sdist
+    requires: [validate_test, validate_lint, validate_codestyle]
