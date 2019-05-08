@@ -46,13 +46,13 @@ class SafetyDBReleaseFilter(FilterReleasePlugin):
     @staticmethod
     def load_safety_db_from_package():
         """Load the safety_db from the safety-db package"""
-        from safety_db import INSECURE
-        return INSECURE  # pylint: disable=E0611
+        from safety_db import INSECURE  # pylint: disable=E0611
+        return INSECURE
 
     def load_safety_db(self):
         """Load the safety_db into the plugin"""
-        # Get the safety_db
 
+        # Get the safety_db
         safety_db_src = {}
         if self.safety_db_src == 'github':
             safety_db_src = self.load_safety_db_from_github()
