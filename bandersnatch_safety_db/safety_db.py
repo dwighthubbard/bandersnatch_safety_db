@@ -32,9 +32,7 @@ class SafetyDBReleaseFilter(FilterReleasePlugin):
         """
         Initialize the plugin
         """
-        logger.info(f'Initing safety_db_release plugin {self.name}')
         if not self.safety_db:
-            logger.info(f'Loading safety_db from {self.safety_db_src}')
             self.load_safety_db()
 
     def load_safety_db_from_github(self):
@@ -68,7 +66,7 @@ class SafetyDBReleaseFilter(FilterReleasePlugin):
                 try:
                     self.safety_db[package].append(Requirement(req_str))
                 except InvalidRequirement:
-                    logger.warn(f'Error adding invalid requirement {req_str}')
+                    logger.warning(f'Error adding invalid requirement {req_str}')
 
     def check_match(self, name, version) -> bool:
         """
@@ -96,9 +94,8 @@ class SafetyDBReleaseFilter(FilterReleasePlugin):
             return False
 
         for requirement in self.safety_db[name]:
-            logger.info(f'Checking {version} in {requirement.specifier} = {version in requirement.specifier}')
             if version in requirement.specifier:
-                logger.info(f"MATCH: Release {name}=={version} matches specifier {requirement.specifier}")
+                logger.debug(f"MATCH: Release {name}=={version} matches specifier {requirement.specifier}")
                 return True
 
         return False
