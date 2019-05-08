@@ -52,6 +52,8 @@ class SafetyDBReleaseFilter(FilterReleasePlugin):
     def load_safety_db(self):
         """Load the safety_db into the plugin"""
         # Get the safety_db
+
+        safety_db_src = {}
         if self.safety_db_src == 'github':
             safety_db_src = self.load_safety_db_from_github()
         elif self.safety_db_src == 'package':
