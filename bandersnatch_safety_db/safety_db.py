@@ -10,7 +10,7 @@ from packaging.version import InvalidVersion, Version
 import requests
 
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)  # pylint: disable=C0103
 
 
 class SafetyDBReleaseFilter(FilterReleasePlugin):
@@ -43,7 +43,8 @@ class SafetyDBReleaseFilter(FilterReleasePlugin):
         logger.debug(f'Loaded safety_db from github at url: {url}')
         return response.json()
 
-    def load_safety_db_from_package(self):
+    @staticmethod
+    def load_safety_db_from_package():
         """Load the safety_db from the safety-db package"""
         from safety_db import INSECURE
         return INSECURE  # pylint: disable=E0611
