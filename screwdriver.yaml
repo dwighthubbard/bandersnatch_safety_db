@@ -8,7 +8,6 @@ jobs:
     steps:
       - postinstall_tox: $BASE_PYTHON -m pip install codecov coverage
       - postvalidate_code: |
-          coverage combine
           codecov
     requires: [~commit, ~pr]
 
