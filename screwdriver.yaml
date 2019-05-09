@@ -1,7 +1,4 @@
 version: 4
-shared:
-  steps:
-    - postbegin: ls -lR /opt/sd 
 jobs:
   validate_test:
     template: python/validate_unittest
