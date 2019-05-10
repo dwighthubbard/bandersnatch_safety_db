@@ -6,7 +6,7 @@ import logging
 from typing import Any, Dict, List
 from bandersnatch.filter import FilterReleasePlugin
 from packaging.requirements import Requirement, InvalidRequirement
-from packaging.version import InvalidVersion, Version
+from packaging.version import InvalidVersion, LegacyVersion, Version
 from pkg_resources import safe_name
 import requests
 
@@ -96,8 +96,12 @@ class SafetyDBReleaseFilter(FilterReleasePlugin):
         try:
             version = Version(version)
         except InvalidVersion:  # pragma: no cover
-            logger.debug(f"Package {name}=={version} has an invalid version")
-            return False
+            try:
+                version = LegacyVersion(version)
+                logger.debug(f'Package {name}=={version} is not a valid PEP 440 version, trying Legacy versioning')
+            except InvalidVersion:
+                logger.debug(f"Package {name}=={version} has an invalid version")
+                return False
 
         for requirement in self.safety_db[name]:
             if version in requirement.specifier:
