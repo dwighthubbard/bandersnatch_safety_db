@@ -92,6 +92,9 @@ class SafetyDBReleaseFilter(FilterReleasePlugin):
             True if it matches, False otherwise.
         """
         name = safe_name(kwargs['name']).lower()
+        if name not in self.safety_db.keys():
+            return False
+        
         version = kwargs['version']
         try:
             version = Version(version)
