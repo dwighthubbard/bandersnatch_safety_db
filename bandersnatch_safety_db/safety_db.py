@@ -91,7 +91,7 @@ class SafetyDBReleaseFilter(FilterReleasePlugin):
         bool:
             True if it matches, False otherwise.
         """
-        name = safe_name(kwargs['name'])
+        name = safe_name(kwargs['name']).lower()
         version = kwargs['version']
         try:
             version = Version(version)
