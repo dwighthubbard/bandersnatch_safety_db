@@ -92,7 +92,6 @@ class SafetyDBReleaseFilter(FilterReleasePlugin):
         """
         name = kwargs['name']
         version = kwargs['version']
-        print(f'Checking for {name}=={version} in safety_db')
         try:
             version = Version(version)
         except InvalidVersion:  # pragma: no cover
@@ -101,7 +100,7 @@ class SafetyDBReleaseFilter(FilterReleasePlugin):
 
         for requirement in self.safety_db[name]:
             if version in requirement.specifier:
-                logger.debug(f"MATCH: Release {name}=={version} matches specifier {requirement.specifier}")
+                logger.debug(f"Safety DB MATCH: Release {name}=={version} matches specifier {requirement.specifier}")
                 return True
 
         return False
