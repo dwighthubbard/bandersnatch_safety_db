@@ -7,6 +7,7 @@ from typing import Any, Dict, List
 from bandersnatch.filter import FilterReleasePlugin
 from packaging.requirements import Requirement, InvalidRequirement
 from packaging.version import InvalidVersion, Version
+from pkg_resources import safe_name
 import requests
 
 
@@ -90,7 +91,7 @@ class SafetyDBReleaseFilter(FilterReleasePlugin):
         bool:
             True if it matches, False otherwise.
         """
-        name = kwargs['name']
+        name = safe_name(kwargs['name'])
         version = kwargs['version']
         try:
             version = Version(version)
