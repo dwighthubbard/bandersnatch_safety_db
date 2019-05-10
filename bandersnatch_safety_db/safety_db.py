@@ -101,7 +101,7 @@ class SafetyDBReleaseFilter(FilterReleasePlugin):
 
         for requirement in self.safety_db[name]:
             if version in requirement.specifier:
-                logger.info(f"Safety DB MATCH: Release {name}=={version} matches specifier {requirement.specifier}")
+                logger.debug(f"Safety DB MATCH: Release {name}=={version} matches specifier {requirement.specifier}")
                 return True
 
         return False
