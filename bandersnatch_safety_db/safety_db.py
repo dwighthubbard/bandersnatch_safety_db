@@ -96,12 +96,13 @@ class SafetyDBReleaseFilter(FilterReleasePlugin):
         try:
             version = Version(version)
         except InvalidVersion:  # pragma: no cover
-            logger.warning(f"Package {name}=={version} has an invalid version")
+            logger.debug(f"Package {name}=={version} has an invalid version")
             return False
 
         for requirement in self.safety_db[name]:
+            logger.debug(f'Checking {version!r} in {requirement.specifier}')
             if version in requirement.specifier:
-                logger.debug(f"Safety DB MATCH: Release {name}=={version} matches specifier {requirement.specifier}")
+                logger.info(f"Safety DB MATCH: Release {name}=={version} matches specifier {requirement.specifier}")
                 return True
 
         return False
