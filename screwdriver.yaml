@@ -3,7 +3,7 @@ jobs:
   validate_test:
     template: python/validate_unittest
     environment:
-      - TOX_ARGS: -p all
+      TOX_ARGS: -p all
     secrets:
       - CODECOV_TOKEN
     requires: [~commit, ~pr]
