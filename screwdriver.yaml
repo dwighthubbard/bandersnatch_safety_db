@@ -17,7 +17,7 @@ jobs:
     requires: [~commit, ~pr]
 
   validate_mypy:
-    template: python/validate_codestyle
+    template: python/validate_mypy
     requires: [~commit, ~pr]
 
   generate_version:
