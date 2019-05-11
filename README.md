@@ -10,3 +10,4 @@
 -----
 
 # Bandersnatch Safety DB filtering plugin
+
