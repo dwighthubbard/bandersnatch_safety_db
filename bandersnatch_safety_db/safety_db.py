@@ -112,3 +112,7 @@ class SafetyDBReleaseFilter(FilterReleasePlugin):
                 return True
 
         return False
+
+
+class SafetyDBReleaseFilterV2(SafetyDBReleaseFilter):
+    pass
