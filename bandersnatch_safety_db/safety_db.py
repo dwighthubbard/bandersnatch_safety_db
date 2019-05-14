@@ -118,6 +118,19 @@ class SafetyDBReleaseFilterV2(SafetyDBReleaseFilter):
     SafetyDBRelease filter for the bandersnatch v2 plugin api
     """
     def filter(self, info, releases):
+        """
+        Filter releases as per the bandersnatch v2 plugin api.
+
+        This method will delete releases from the releases dictionary that are listed in the loaded safety_db.
+
+        Parameters
+        ==========
+        info: dict
+            The bandersnatch release info from the package metadata
+
+        releases: list
+            The bandersnatch releases dictionary to be filtered.
+        """
         name = info["name"]
         delete_count = 0
         for version in list(releases.keys()):
