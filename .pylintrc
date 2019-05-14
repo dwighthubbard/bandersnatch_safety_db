@@ -170,7 +170,6 @@ reports=no
 # Activate the evaluation score.
 score=yes
 
-
 [REFACTORING]
 
 # Maximum number of nested blocks for function / method body
