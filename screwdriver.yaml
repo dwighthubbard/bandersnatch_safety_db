@@ -1,8 +1,9 @@
 version: 4
-
 jobs:
   validate_test:
     template: python/validate_unittest
+    environment:
+      TOX_ARGS: -p all
     secrets:
       - CODECOV_TOKEN
     requires: [~commit, ~pr]
@@ -19,6 +20,6 @@ jobs:
     template: python/generate_version
     requires: [~commit]
     
-  package_python_sdist:
+  package_python:
     template: python/package_python_sdist
     requires: [validate_test, validate_lint, validate_codestyle, generate_version]
