@@ -119,6 +119,10 @@ class SafetyDBReleaseFilterV2(SafetyDBReleaseFilter):
     """
     def filter(self, info, releases):
         name = info["name"]
+        delete_count = 0
         for version in list(releases.keys()):
             if self.check_match(name=name, version=version):
                 del releases[version]
+                delete_count += 1
+        if delete_count > 0:
+            logger.info(f'Filtered {delete_count} releases from {name}')
