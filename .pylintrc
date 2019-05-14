@@ -147,7 +147,6 @@ disable=print-statement,
 # it should appear only once). See also the "--disable" option for examples.
 enable=c-extension-no-member
 
-
 [REPORTS]
 
 # Python expression which should return a note less than 10 (10 is the highest
