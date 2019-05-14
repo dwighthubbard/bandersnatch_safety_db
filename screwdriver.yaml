@@ -20,6 +20,6 @@ jobs:
     template: python/generate_version
     requires: [~commit]
     
-  package_python:
+  package_python_sdist:
     template: python/package_python_sdist
     requires: [validate_test, validate_lint, validate_codestyle, generate_version]
