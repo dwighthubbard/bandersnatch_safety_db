@@ -10,3 +10,20 @@
 
 # Bandersnatch Safety DB filtering plugin
 
+This package provides a bandersnatch plugin that filters releases based on [safety-db]().
+
+## Installation
+
+``` command
+pip install bandersnatch bandersnatch_safety_db
+```
+
+## Configuration
+
+To enable add `safety_db_release` to the [blacklist] plugins setting of the bandersnatch.conf.  
+
+```
+[blacklist]
+plugins =
+    safety_db_release
+```
