@@ -110,9 +110,15 @@ class SafetyDBReleaseFilter(FilterReleasePlugin):
             if version in requirement.specifier:
                 logger.debug(f"Safety DB MATCH: Release {name}=={version} matches specifier {requirement.specifier}")
                 return True
-
         return False
 
 
 class SafetyDBReleaseFilterV2(SafetyDBReleaseFilter):
-    pass
+    """
+    SafetyDBRelease filter for the bandersnatch v2 plugin api
+    """
+    def filter(self, info, releases):
+        name = info["name"]
+        for version in list(releases.keys()):
+            if self.check_match(name=name, version=version):
+                del releases[version]
