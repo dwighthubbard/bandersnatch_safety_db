@@ -20,5 +20,6 @@ exclude_lines =
   raise NotImplementedError
   if 0:
   if __name__ == .__main__.:
+
 precision = 1
 show_missing = True
