@@ -145,7 +145,6 @@ disable=print-statement,
 enable=c-extension-no-member
 
 [REPORTS]
-
 # Python expression which should return a note less than 10 (10 is the highest
 # note). You have access to the variables errors warning, statement which
 # respectively contain the number of errors / warnings messages and the total
