@@ -27,4 +27,6 @@ jobs:
     
   package_python_sdist:
     template: python/package_python_sdist
+    environment:
+      PUBLISH: True
     requires: [validate_test, validate_lint, validate_codestyle, validate_security, generate_version]
