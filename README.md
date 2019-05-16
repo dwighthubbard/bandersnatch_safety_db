@@ -1,5 +1,5 @@
 
-[![Pipeline Status](http://45.79.65.140:9000/pipelines/2/badge)](http://45.79.65.140:9000/pipelines/2/events)  [![codecov](https://codecov.io/gh/dwighthubbard/bandersnatch_safety_db/branch/master/graph/badge.svg)](https://codecov.io/gh/dwighthubbard/bandersnatch_safety_db)
+[![Pipeline Status](http://cd.screwdriver.cd/pipelines/2820/badge)](https://cd.screwdriver.cd/pipelines/2820/events)  [![codecov](https://codecov.io/gh/dwighthubbard/bandersnatch_safety_db/branch/master/graph/badge.svg)](https://codecov.io/gh/dwighthubbard/bandersnatch_safety_db)
 
 -----
 
