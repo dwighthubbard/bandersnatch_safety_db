@@ -5,8 +5,6 @@ shared:
 jobs:
   validate_test:
     template: python/validate_unittest
-    secrets:
-      - CODECOV_TOKEN
     requires: [~commit, ~pr]
 
   validate_lint:
