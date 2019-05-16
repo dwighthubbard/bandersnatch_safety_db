@@ -2,6 +2,7 @@ version: 4
 shared:
   environment:
     PACKAGE_DIRECTORY: bandersnatch_safety_db
+    
 jobs:
   validate_test:
     template: python/validate_unittest
