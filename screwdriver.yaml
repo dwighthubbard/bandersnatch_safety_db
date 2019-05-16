@@ -31,3 +31,4 @@ jobs:
     environment:
       PUBLISH: True
     requires: [validate_test, validate_lint, validate_codestyle, validate_security, generate_version]
+
