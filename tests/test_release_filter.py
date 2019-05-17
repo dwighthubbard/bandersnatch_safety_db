@@ -4,7 +4,7 @@ from tempfile import TemporaryDirectory
 from unittest import skip
 import logging
 logging.basicConfig(level=logging.DEBUG)
-from bandersnatch_safety_db.safety_db import SafetyDBReleaseFilter
+from bandersnatch_safety_db.safety_db import SafetyDBReleaseFilter, SafetyDBReleaseFilterV2
 from vcr_unittest import VCRTestCase
 
 import bandersnatch.filter
