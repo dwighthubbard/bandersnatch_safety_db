@@ -4,7 +4,7 @@ from tempfile import TemporaryDirectory
 from unittest import skip
 import logging
 logging.basicConfig(level=logging.DEBUG)
-from bandersnatch_safety_db.safety_db import SafetyDBReleaseFilter
+from bandersnatch_safety_db.safety_db import SafetyDBReleaseFilter, SafetyDBReleaseFilterV2
 from vcr_unittest import VCRTestCase
 
 import bandersnatch.filter
@@ -25,14 +25,14 @@ class TestReleaseFilter(VCRTestCase):
     cwd = None
 
     def setUp(self):
-        super(TestProjectFilter, self).setUp()
+        super().setUp()
         self.cwd = os.getcwd()
         self.tempdir = TemporaryDirectory()
         bandersnatch.filter.loaded_filter_plugins = defaultdict(list)
         os.chdir(self.tempdir.name)
 
     def tearDown(self):
-        super(TestProjectFilter, self).tearDown()
+        super().tearDown()
         if self.tempdir:
             os.chdir(self.cwd)
             self.tempdir.cleanup()
