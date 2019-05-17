@@ -25,14 +25,14 @@ class TestReleaseFilter(VCRTestCase):
     cwd = None
 
     def setUp(self):
-        super(TestProjectFilter, self).setUp()
+        super().setUp()
         self.cwd = os.getcwd()
         self.tempdir = TemporaryDirectory()
         bandersnatch.filter.loaded_filter_plugins = defaultdict(list)
         os.chdir(self.tempdir.name)
 
     def tearDown(self):
-        super(TestProjectFilter, self).tearDown()
+        super().tearDown()
         if self.tempdir:
             os.chdir(self.cwd)
             self.tempdir.cleanup()
