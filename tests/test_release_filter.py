@@ -19,7 +19,7 @@ from bandersnatch.package import Package
 TEST_CONF = "test.conf"
 
 
-class TestProjectFilter(VCRTestCase):
+class TestReleaseFilter(VCRTestCase):
 
     tempdir = None
     cwd = None
@@ -38,7 +38,7 @@ class TestProjectFilter(VCRTestCase):
             self.tempdir.cleanup()
             self.tempdir = None
 
-    def test__git__loads_db(self):
+    def test__git__loads_db__v1(self):
         plugin = SafetyDBReleaseFilter()
         plugin.initialize_plugin()
         self.assertIsInstance(plugin.safety_db, dict)
@@ -46,7 +46,15 @@ class TestProjectFilter(VCRTestCase):
 
         self.assertIn('<0.16.3', [_.specifier for _ in plugin.safety_db['aiohttp']])
 
-    def test__plugin__loads__explicitly_enabled(self):
+    def test__git__loads_db__v2(self):
+        plugin = SafetyDBReleaseFilterV2()
+        plugin.initialize_plugin()
+        self.assertIsInstance(plugin.safety_db, dict)
+        self.assertIn('aiohttp', list(plugin.safety_db.keys()))
+
+        self.assertIn('<0.16.3', [_.specifier for _ in plugin.safety_db['aiohttp']])
+
+    def test__plugin__loads__explicitly_enabled_v1(self):
         with open(TEST_CONF, "w") as testconfig_handle:
             testconfig_handle.write(
                 """\
