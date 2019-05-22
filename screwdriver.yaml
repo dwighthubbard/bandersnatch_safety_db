@@ -18,6 +18,10 @@ jobs:
     template: python/validate_codestyle
     requires: [~commit, ~pr]
 
+  validate_safetydb:
+    template: python/validate_safety
+    requires: [~commit, ~pr]
+    
   validate_security:
     template: python/validate_security
     requires: [~commit, ~pr]
@@ -30,4 +34,4 @@ jobs:
     template: python/package_python
     environment:
       PUBLISH: True
-    requires: [validate_test, validate_lint, validate_codestyle, validate_security, generate_version]
+    requires: [validate_test, validate_lint, validate_codestyle, validate_safetydb, validate_security, generate_version]
