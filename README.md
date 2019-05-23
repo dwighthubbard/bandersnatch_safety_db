@@ -17,6 +17,14 @@ pip install bandersnatch bandersnatch_safety_db
 
 To enable add `safety_db_release` to the [blacklist] plugins setting of the bandersnatch.conf.  
 
+- If bandersnatch > 3.3.1
+```
+[plugins]
+enabled =
+    safety_db_release
+```
+
+- If bandersnatch <= 3.3.1
 ```
 [blacklist]
 plugins =
