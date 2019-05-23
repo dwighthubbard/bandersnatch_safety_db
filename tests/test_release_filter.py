@@ -154,7 +154,7 @@ packages =
         with open('web/simple/aiida-core/index.html') as fh:
             index = fh.read()
         self.assertIn('aiida-core-0.12.3.tar.gz', index)
-        self.assertNotIn('aiida-core-0.6.0.1.tar.gz', index)
+        self.assertNotIn('aiida-core-0.6.0.1.tar.gz', index)  # //NOSONAR
 
     def _dump_config(self, configuraton):
         for section in configuraton.config.sections():
