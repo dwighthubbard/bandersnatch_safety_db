@@ -1,0 +1,4 @@
+[tool.towncrier]
+    package = "bandersnatch_safety_db"
+    package_dir = "."
+    filename = "NEWS.rst"
