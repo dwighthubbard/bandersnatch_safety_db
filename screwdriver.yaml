@@ -51,7 +51,4 @@ jobs:
       PUBLISH: True
     requires: [verify_test_package]
 
-  generate_changelog:
-    template: python/generate_changelog
-    requires: [verify_test_package]
 
