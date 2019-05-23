@@ -7,7 +7,7 @@ jobs:
   validate_test:
     template: python/validate_unittest
     environment:
-      TOX_ARGS: -p all --parallel-live -vve
+      TOX_ARGS: -p all --parallel-live
     secrets:
       - CODECOV_TOKEN
     requires: [~commit, ~pr]
