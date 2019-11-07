@@ -19,7 +19,7 @@ jobs:
     requires: [~commit, ~pr]
 
   validate_safetydb:
-    template: python/validate_safety
+    template: validate_dependencies
     requires: [~commit, ~pr]
     
   validate_security:
